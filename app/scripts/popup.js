@@ -5,6 +5,7 @@ $(document).ready(function() {
 		chrome.runtime.sendMessage({
     		value: $('#timeframe').val(),
     		lang: $('#language').val(),
+    		turnMeOn: $('#isEnable').val(),
     		type: "difficulty"
     	});
 

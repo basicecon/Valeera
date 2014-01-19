@@ -6,7 +6,7 @@ var known_words_college = {}
 
 var difficulty = false;
 var language = "zh-TW";
-
+var enable = true;
 
 // read in high school word list
 var xhr = new XMLHttpRequest();
@@ -149,17 +149,24 @@ chrome.runtime.onMessage.addListener(
   			difficulty = false;
   		}
   		language = request.lang;
+  		if (request.turnMeOn == "disable") {
+  			enable = false;
+  			chrome.browserAction.setIcon({path:"images/greyicon-19.png"});
+  		} else {
+  			enable = true; 
+  			chrome.browserAction.setIcon({path:"images/icon-19.png"});
+  		}
   		chrome.tabs.getSelected(null, function(tab) {
   			var code = 'window.location.reload();';
   			chrome.tabs.executeScript(tab.id, {code: code});
 		});
   	} 
   	else {
-  	breakup(request, function(words){
-  		sendResponse({text: words.join(" ")});
-
-  	});
-  	return true;
+  		if (enable)
+  			breakup(request, function(words){
+  				sendResponse({text: words.join(" ")});
+  			});
+  		return true;
   	}
   }
 );
